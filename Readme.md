@@ -1,21 +1,67 @@
-Script.py => params optimization
-idm_output.txt => all frames with optimized (calibrated) parameters
-idm_mean_parameters.csv => since in 95% algorithms have to the same values, here are the values for future clustering.
-driver_classification_summary.txt => simple classification output
-driver_classification.png => plot 
-08.05 => presentation
+Simulation and Classification of Driver Behavior
+This repository implements a framework for calibrating the Intelligent Driver Model (IDM) and classifying driving styles using high-resolution trajectory data from the highD dataset.
 
+Project Overview
+The system processes drone-captured vehicle trajectories to extract longitudinal dynamics and optimize behavioral parameters. It transitions from raw time-series data to distinct driver behavior profiles.
 
-1.) RUN THIS TO INSTALL ALL IMPORTS
-    pip install pandas numpy scipy scikit-learn matplotlib
+Key Features
 
-2.) SEE DATA SECTION TO CHANGE DATASET
-    META_DATA_PATH = 'tracks_meta'
-    RAW_DATA_PATH = '241202_highD_lcTrainingTestForOptimisationData_di.pkl' <- please add it to folder
-    MAX_REC_ID = 10 # [1-60]
+IDM Calibration: Optimization of driver-specific parameters (v0,T,a,b,s ) using scipy-based optimization.
 
-3.) RUN FILE TO RUN THE PROGRAM
-    python script.py
+Data Processing: Extraction of velocity (v), acceleration (X_acc), and distance headway (s) from .pkl trajectory files.
 
-classification.py <= run after
-graph.py <= run to show difference VIdm and Xacc
+Behavioral Classification: Categorization of drivers based on calibrated parameter distributions.
+
+Visualization: Statistical plotting of parameter convergence and classification clusters.
+
+Technical Stack
+Language: Python 3.x
+
+Libraries: pandas, numpy, scipy, scikit-learn, matplotlib
+
+File Structure
+script.py: Core optimization engine for IDM parameter calibration.
+
+classification.py: Driver behavior categorization logic.
+
+graph.py: Comparative visualization of V_IDM vs X_acc
+
+idm_mean_parameters.csv: Aggregated behavioral data for clustering.
+
+driver_classification.png: Visual output of the classification model.
+
+Installation & Setup
+1. Environment Requirements
+
+Bash
+pip install pandas numpy scipy scikit-learn matplotlib
+2. Data Configuration
+
+The scripts require the highD dataset structure. Ensure the following paths are set in your local environment:
+
+META_DATA_PATH: Directory containing .csv metadata.
+
+RAW_DATA_PATH: Path to the .pkl trajectory file (e.g., 241202_highD_lcTrainingTestForOptimisationData_di.pkl).
+
+3. Execution Sequence
+
+Calibration: Perform parameter optimization.
+
+Bash
+python script.py
+Visualization: Generate comparative plots.
+
+Bash
+python graph.py
+Classification: Run behavioral analysis.
+
+Bash
+python classification.py
+Methodology
+The input consists of drone recordings (25 FPS) covering 400m highway segments.
+
+Input Features: Ego velocity (v), longitudinal acceleration (X_acc), and distance headway (s).
+
+Pre-processing: Relative speed (Δv) calculation. Default values (s=250m,Δv=1.0m/s) are applied for free-flow traffic consistency.
+
+Optimization: Vehicle class (Car/Truck) constraints are used to bound the parameter search space.
